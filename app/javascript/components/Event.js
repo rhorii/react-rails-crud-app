@@ -40,7 +40,7 @@ const Event = ({ events }) => {
 };
 
 Event.propTypes = {
-  eventes: PropTypes.arrayOf(
+  events: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       event_type: PropTypes.string.isRequired,

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Editor from './Editor';
 import { ToastContainer } from 'react-toastify';
-import './App.css'
+import Editor from './Editor';
+import './App.css';
 
 const App = () => (
   <>

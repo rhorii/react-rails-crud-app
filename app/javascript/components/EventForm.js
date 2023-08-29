@@ -1,33 +1,46 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import Pikaday from "pikaday";
+import React, {
+  useState, useRef, useEffect, useCallback,
+} from 'react';
+import { useParams } from 'react-router-dom';
+import Pikaday from 'pikaday';
 import 'pikaday/css/pikaday.css';
-import PropTypes from "prop-types";
-import { formatDate, isEmptyObject, validateEvent } from "../helpers/helpers";
+import PropTypes from 'prop-types';
+import { formatDate, isEmptyObject, validateEvent } from '../helpers/helpers';
 
 const EventForm = ({ events, onSave }) => {
   const { id } = useParams();
 
-  const defaults = {
-    event_type: '',
-    event_date: '',
-    title: '',
-    speaker: '',
-    host: '',
-    published: false,
-  };
+  const initialEventState = useCallback(
+    () => {
+      const defaults = {
+        event_type: '',
+        event_date: '',
+        title: '',
+        speaker: '',
+        host: '',
+        published: false,
+      };
 
-  const currEvent = id ? events.find((e) => e.id == Number(id)) : {};
-  const initialEventState = { ...defaults, ...currEvent };
+      const currEvent = id ? events.find((e) => e.id === Number(id)) : {};
+
+      return { ...defaults, ...currEvent };
+    },
+    [events, id],
+  );
+
   const [event, setEvent] = useState(initialEventState);
   const [formErrors, setFormErrors] = useState({});
 
   const dateInput = useRef(null);
 
+  const updateEvent = (key, value) => {
+    setEvent((prevEvent) => ({ ...prevEvent, [key]: value }));
+  };
+
   useEffect(() => {
     const p = new Pikaday({
       field: dateInput.current,
-      toString: date => formatDate(date),
+      toString: (date) => formatDate(date),
       onSelect: (date) => {
         const formattedDate = formatDate(date);
         dateInput.current.value = formattedDate;
@@ -40,11 +53,7 @@ const EventForm = ({ events, onSave }) => {
 
   useEffect(() => {
     setEvent(initialEventState);
-  }, [events]);
-
-  const updateEvent = (key, value) => {
-    setEvent((prevEvent) => ({ ...prevEvent, [key]: value }));
-  }
+  }, [events, initialEventState]);
 
   const handleInputChange = (e) => {
     const { target } = e;
@@ -80,7 +89,7 @@ const EventForm = ({ events, onSave }) => {
     } else {
       onSave(event);
     }
-  }
+  };
 
   return (
     <section>
@@ -152,7 +161,7 @@ const EventForm = ({ events, onSave }) => {
           </label>
         </div>
         <div>
-        <label htmlFor="published">
+          <label htmlFor="published">
             <strong>Publish:</strong>
             <input
               type="checkbox"
@@ -183,7 +192,7 @@ EventForm.propTypes = {
       speaker: PropTypes.string.isRequired,
       host: PropTypes.string.isRequired,
       published: PropTypes.bool.isRequired,
-    })
+    }),
   ),
   onSave: PropTypes.func.isRequired,
 };

@@ -47,9 +47,9 @@ const Editor = () => {
       success('Event Added!');
       navigate(`/events/${savedEvent.id}`);
     } catch (error) {
-        handleAjaxError(error);
+      handleAjaxError(error);
     }
-  }
+  };
 
   const deleteEvent = async (eventId) => {
     try {
@@ -61,9 +61,9 @@ const Editor = () => {
 
       success('Event Deleted!');
       navigate('/events');
-      setEvents(events.filter(event => event.id !== eventId));
+      setEvents(events.filter((event) => event.id !== eventId));
     } catch (error) {
-        handleAjaxError(error);
+      handleAjaxError(error);
     }
   };
 
@@ -75,14 +75,13 @@ const Editor = () => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-        }
-      }
-      );
+        },
+      });
 
       if (!response.ok) throw Error(response.statusText);
 
       const newEvents = events;
-      const idx = newEvents.findIndex((event) => event.id == updatedEvent.id);
+      const idx = newEvents.findIndex((event) => event.id === updatedEvent.id);
       newEvents[idx] = updatedEvent;
       setEvents(newEvents);
 
@@ -104,9 +103,9 @@ const Editor = () => {
             <EventList events={events} />
 
             <Routes>
-              <Route path='new' element={<EventForm onSave={addEvent} />} />
-              <Route path=':id' element={<Event events={events} onDelete={deleteEvent} />} />
-              <Route path=':id/edit' element={<EventForm events={events} onSave={updateEvent} />} />
+              <Route path="new" element={<EventForm onSave={addEvent} />} />
+              <Route path=":id" element={<Event events={events} onDelete={deleteEvent} />} />
+              <Route path=":id/edit" element={<EventForm events={events} onSave={updateEvent} />} />
             </Routes>
           </>
         )}
